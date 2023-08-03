@@ -13,6 +13,7 @@ import { weatherInterpretation } from "../Services/meteo-service";
 function Home() {
   const [coords, setCoords] = useState();
   const [weather, setWeather] = useState();
+  const [city, setCity] = useState();
 
   //la structure ?. permet de faire une petite conditionnel qui retourne undefined si c'est faux
   //pour éviter que ça crash
@@ -25,6 +26,7 @@ function Home() {
   useEffect(() => {
     if (coords) {
       fetchWeather(coords);
+      fetchCity(coords);
     }
   }, [coords]);
 
@@ -52,12 +54,18 @@ function Home() {
     setWeather(weatherResponse);
   }
 
+  //fonction pour récupéré les données de l'api qui retourne la ville en fonction des coordonné
+  async function fetchCity(coordinates) {
+    const cityResponse = await MeteoAPI.fetchCityFromcoord(coordinates);
+    setCity(cityResponse);
+  }
+
   return currentWeather ? (
     <>
       <View style={home.meteoBasic}>
         <MeteoBasic
           temperature={Math.round(currentWeather?.temperature)}
-          city="Todo"
+          city={city}
           interpretation={weatherInterpretation(currentWeather.weathercode)}
         />
       </View>
