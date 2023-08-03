@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import home from "../Style/home.style";
 import {
   requestForegroundPermissionsAsync,
@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import MeteoBasic from "../Components/MeteoBasic";
 import MeteoAdvance from "../Components/MeteoAdvance";
 import Container from "../Components/Container";
+import SearchBar from "../Components/SearchBar";
 
 function Home() {
   const [coords, setCoords] = useState();
@@ -63,6 +64,16 @@ function Home() {
     setCity(cityResponse);
   }
 
+  //fonction pour récupéré la latitude et longitude en fonction de la ville tapé dans l'input
+  async function fetchCoordsByCity(city) {
+    try {
+      const coords = await MeteoAPI.fetchCoordsFromCity(city);
+      setCoords(coords);
+    } catch (error) {
+      Alert.alert("Oups !", error);
+    }
+  }
+
   //fonction pour aller à la page Forecast
   function forecastPage() {
     //avec le navigate, on met, le nom de la page, et on peu passer un objet qui permet d'envoyer
@@ -82,7 +93,7 @@ function Home() {
       </View>
 
       <View style={home.searchBar}>
-        <Text>input recherche</Text>
+        <SearchBar onSubmit={fetchCoordsByCity} />
       </View>
 
       <View style={home.meteoAdvance}>

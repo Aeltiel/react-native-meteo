@@ -24,4 +24,17 @@ export class MeteoAPI {
     ).data;
     return city || village || town;
   }
+
+  static async fetchCoordsFromCity(city) {
+    try {
+      const { latitude: lat, longitude: lng } = (
+        await axios.get(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${city}&language=fr&count=1`
+        )
+      ).data.results[0];
+      return { lat, lng };
+    } catch (error) {
+      throw "Pas de coordonées trouvées, pour la recherche : " + city;
+    }
+  }
 }
