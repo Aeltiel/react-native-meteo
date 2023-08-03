@@ -6,10 +6,17 @@ import {
 } from "expo-location";
 import { useEffect, useState } from "react";
 import { MeteoAPI } from "../api/meteo";
+import Txt from "../Components/Txt";
+import MeteoBasic from "../Components/MeteoBasic";
+import { weatherInterpretation } from "../Services/meteo-service";
 
 function Home() {
   const [coords, setCoords] = useState();
   const [weather, setWeather] = useState();
+
+  //la structure ?. permet de faire une petite conditionnel qui retourne undefined si c'est faux
+  //pour éviter que ça crash
+  const currentWeather = weather?.current_weather;
 
   useEffect(() => {
     getCoords();
@@ -45,10 +52,14 @@ function Home() {
     setWeather(weatherResponse);
   }
 
-  return (
+  return currentWeather ? (
     <>
       <View style={home.meteoBasic}>
-        <Text>meteo basic</Text>
+        <MeteoBasic
+          temperature={Math.round(currentWeather?.temperature)}
+          city="Todo"
+          interpretation={weatherInterpretation(currentWeather.weathercode)}
+        />
       </View>
 
       <View style={home.searchBar}>
@@ -59,6 +70,6 @@ function Home() {
         <Text>meteo avancer</Text>
       </View>
     </>
-  );
+  ) : null;
 }
 export default Home;

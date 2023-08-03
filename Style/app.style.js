@@ -7,6 +7,7 @@ const appStyle = StyleSheet.create({
   img: {
     flex: 1,
     backgroundColor: "black",
+    padding: 20,
   },
   imgOpacity: {
     opacity: 0.75,
