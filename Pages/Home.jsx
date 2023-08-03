@@ -7,13 +7,16 @@ import {
 import { useEffect, useState } from "react";
 import { MeteoAPI } from "../api/meteo";
 import { weatherInterpretation } from "../Services/meteo-service";
+import { useNavigation } from "@react-navigation/native";
 import MeteoBasic from "../Components/MeteoBasic";
 import MeteoAdvance from "../Components/MeteoAdvance";
+import Container from "../Components/Container";
 
 function Home() {
   const [coords, setCoords] = useState();
   const [weather, setWeather] = useState();
   const [city, setCity] = useState();
+  const nav = useNavigation();
 
   //la structure ?. permet de faire une petite conditionnel qui retourne undefined si c'est faux
   //pour éviter que ça crash
@@ -60,13 +63,21 @@ function Home() {
     setCity(cityResponse);
   }
 
+  //fonction pour aller à la page Forecast
+  function forecastPage() {
+    //avec le navigate, on met, le nom de la page, et on peu passer un objet qui permet d'envoyer
+    //des données à la page en question
+    nav.navigate("Forecast", { city, ...weather.daily });
+  }
+
   return currentWeather ? (
-    <>
+    <Container>
       <View style={home.meteoBasic}>
         <MeteoBasic
           temperature={Math.round(currentWeather?.temperature)}
           city={city}
           interpretation={weatherInterpretation(currentWeather.weathercode)}
+          onPress={forecastPage}
         />
       </View>
 
@@ -81,7 +92,7 @@ function Home() {
           crepuscule={weather.daily.sunset[0].split("T")[1]}
         />
       </View>
-    </>
+    </Container>
   ) : null;
 }
 export default Home;
