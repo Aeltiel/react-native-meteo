@@ -6,9 +6,9 @@ import {
 } from "expo-location";
 import { useEffect, useState } from "react";
 import { MeteoAPI } from "../api/meteo";
-import Txt from "../Components/Txt";
-import MeteoBasic from "../Components/MeteoBasic";
 import { weatherInterpretation } from "../Services/meteo-service";
+import MeteoBasic from "../Components/MeteoBasic";
+import MeteoAdvance from "../Components/MeteoAdvance";
 
 function Home() {
   const [coords, setCoords] = useState();
@@ -75,7 +75,11 @@ function Home() {
       </View>
 
       <View style={home.meteoAdvance}>
-        <Text>meteo avancer</Text>
+        <MeteoAdvance
+          vent={currentWeather.windspeed}
+          aube={weather.daily.sunrise[0].split("T")[1]}
+          crepuscule={weather.daily.sunset[0].split("T")[1]}
+        />
       </View>
     </>
   ) : null;
