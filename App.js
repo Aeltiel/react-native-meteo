@@ -38,7 +38,7 @@ export default function App() {
       }
 
       const token = await Notifications.getExpoPushTokenAsync({
-        projectId: Constants.expoConfig.extra.eas.projectId,
+        projectId: Constants.expoConfig?.extra?.eas?.projectId,
       });
       console.log(token);
       // Envoi du token a notre serveur
